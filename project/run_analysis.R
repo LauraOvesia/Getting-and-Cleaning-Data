@@ -80,4 +80,3 @@ tidy <- aggregate(. ~subject + activity, extracted_measurements , mean)
 
 #write table to file
 write.table(tidy, file = "Tidy_Data_Set.txt", row.names = FALSE)
-write.table(tidyData, file = "Tidy.txt", row.names = FALSE)

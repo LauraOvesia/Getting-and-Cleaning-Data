@@ -3,10 +3,6 @@
 library(data.table)
 library(dplyr)
 
-
-
-
-
 # Step1. Merges the training and the test sets to create one data set.
 
 #read train data
@@ -58,6 +54,8 @@ extracted_measurements$activity[extracted_measurements$activity == i] <- as.char
 
 extracted_measurements$subject <- as.factor(extracted_measurements$subject)
 
+#Step 4 Appropriately labels the data set with descriptive variable names. 
+
 names(extracted_measurements)<-gsub("Acc", "Accelerometer", names(extracted_measurements))
 names(extracted_measurements)<-gsub("Gyro", "Gyroscope", names(extracted_measurements))
 names(extracted_measurements)<-gsub("BodyBody", "Body", names(extracted_measurements))
@@ -71,15 +69,14 @@ names(extracted_measurements)<-gsub("-freq()", "Frequency", names(extracted_meas
 names(extracted_measurements)<-gsub("angle", "Angle", names(extracted_measurements))
 names(extracted_measurements)<-gsub("gravity", "Gravity", names(extracted_measurements))
 
+
+Step 5 From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 #create data table
 extracted_measurements <- data.table(extracted_measurements)
 
-#create tidy 
+#create tidy dataset that contain the average of each variable for each activity and each subject
 
 tidy <- aggregate(. ~subject + activity, extracted_measurements , mean)
-
-#order tidy
-tidy <- tidy[order(tidy$subject,tidy$activity),]
 
 #write table to file
 write.table(tidy, file = "Tidy_Data_Set.txt", row.names = FALSE)

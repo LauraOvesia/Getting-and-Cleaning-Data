@@ -44,21 +44,37 @@ The following files are available for the train and test data. Their description
 - 'train/Inertial Signals/body_gyro_x_train.txt': The angular velocity vector measured by the gyroscope for each window sample. The units are radians/second.
 
 
-## Transformation details
+##Variables
+ - subject_train - read dataset from subject_train.txt
+ - activity_train - read dataset from activity_train.txt
+ - features_train - read dataset from features_train.txt
+ - subject_test - read dataset from subject_test.txt
+ - activity_test - read dataset from activity_test.txt
+ - features_test - read dataset from features_test.txt
+ - subject - merged dataset between subject_train and subject_test
+ - activity - merged dataset between activity_train and activity_test
+ - features - merged dataset between features_train and features_test
+ - final_data - merged data from activity,subject and features
+ - columns_contains_mean_or_std - vector of all the columns that contains mean() or std()
+ - columns_to_extract - combined vector with all the values from columns_contains_mean_or_std and the column values coresponding to "activity" and "subject"
+ - extracted_measurements - subset from final_data that contains just the columns included in columns_to_extract
+ - activity_labels - read the activity labels from activity_labels.txt
+ - tidy - final dataset with the average of each variable for each activity and each subject
 
-There are 5 parts:
+##Steps 
+- read train data
+- read test data
+- merge data from train and test
+- load data columns names from files
+- change the column names
+- create master data set
+- get all the columns names that contains "mean" or "std" plus the "activity" and "subject" columns
+- create a new dataset that is a subset from the master data set and contains just the columns from the previous step
+- load the activity labels from file
+- apply the activity labels to the dataset
+- factorize the "subject" column
+- change the dataset column names to appropriately labels the data set with descriptive variable names 
+- create a new datatable in order to be able to use write.table function
+- create tidy dataset that contain the average of each variable for each activity and each subject
+- write data to output file
 
-1. Merges the training and the test sets to create one data set.
-2. Extracts only the measurements on the mean and standard deviation for each measurement.
-3. Uses descriptive activity names to name the activities in the data set
-4. Appropriately labels the data set with descriptive activity names.
-5. Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-
-## How ```run_analysis.R``` implements the above steps:
-
-* Require ```reshapre2``` and ```data.table``` 
-* Load both test and train data
-* Load the features and activity labels.
-* Extract the mean and standard deviation column names and data.
-* Process the data. There are two parts processing test and train data respectively.
-* Merge data set.

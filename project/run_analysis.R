@@ -23,7 +23,6 @@ features <- rbind(features_train, features_test)
 #load data columns names
 features_names <- read.table("UCI HAR Dataset/features.txt")
 
-
 #change the column names
 colnames(features) <- t(features_names[2])
 names(subject)<-c("subject")
@@ -36,6 +35,7 @@ final_data <- cbind(features,activity,subject)
 
 #get all the columns names that contains "mean" or "std"
 columns_contains_mean_or_std <- grep("mean\\(\\)|std\\(\\)", names(final_data), ignore.case=TRUE)
+#colums 562 and 563 corespond to "activity" and "subject"
 columns_to_extract<-c(columns_contains_mean_or_std, 562, 563)
 #extract data from the "final_data" dataset 
 extracted_measurements<- final_data[,columns_to_extract]
@@ -55,20 +55,12 @@ extracted_measurements$activity[extracted_measurements$activity == i] <- as.char
 extracted_measurements$subject <- as.factor(extracted_measurements$subject)
 
 #Step 4 Appropriately labels the data set with descriptive variable names. 
+source_label=c("Acc","Gyro","BodyBody","Mag","^t","^f","tBody","-mean()","-std()","-freq()","angle","gravity")
+replacement_labels=c("Accelerometer","Gyroscope","Body","Magnitude","Time","Frequency","TimeBody","Mean","StandardDeviation","Frequency","Angle","Gravity")
 
-names(extracted_measurements)<-gsub("Acc", "Accelerometer", names(extracted_measurements))
-names(extracted_measurements)<-gsub("Gyro", "Gyroscope", names(extracted_measurements))
-names(extracted_measurements)<-gsub("BodyBody", "Body", names(extracted_measurements))
-names(extracted_measurements)<-gsub("Mag", "Magnitude", names(extracted_measurements))
-names(extracted_measurements)<-gsub("^t", "Time", names(extracted_measurements))
-names(extracted_measurements)<-gsub("^f", "Frequency", names(extracted_measurements))
-names(extracted_measurements)<-gsub("tBody", "TimeBody", names(extracted_measurements))
-names(extracted_measurements)<-gsub("-mean()", "Mean", names(extracted_measurements), ignore.case = TRUE)
-names(extracted_measurements)<-gsub("-std()", "STD", names(extracted_measurements), ignore.case = TRUE)
-names(extracted_measurements)<-gsub("-freq()", "Frequency", names(extracted_measurements), ignore.case = TRUE)
-names(extracted_measurements)<-gsub("angle", "Angle", names(extracted_measurements))
-names(extracted_measurements)<-gsub("gravity", "Gravity", names(extracted_measurements))
-
+for (i in 1:12){
+names(extracted_measurements)<-gsub(source_label[i], replacement_labels[i], names(extracted_measurements))
+}
 
 Step 5 From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 #create data table
